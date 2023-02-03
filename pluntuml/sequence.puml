@@ -1,0 +1,48 @@
+@startuml
+autonumber
+
+actor user as "User"
+participant client as "Web App"
+box "Onchain"
+	participant validator as "Validator smart contract"
+	participant nftm as "NFT Marketplace"
+	participant nft as "NFT"
+end box 
+participant graph as "The Graph"
+
+user -> nftm: Buying NFT
+nftm -> nft: Transfering ownership
+nft --> user
+client -> validator: Instantiating a validator linked to NFT address
+validator --> nft
+
+user -> client: Setting a secretKey
+client -> validator: call setSecret method
+validator --> client: Ok 
+client -> client: (*)OPT: saving secretKey
+client --> user: Ok
+
+user -> client: Payment with NFT discount  
+activate client
+
+	client -> validator: call validate method with an **userSessionId**
+	validator -> nft: balanceOf for the user address 
+	nft --> validator
+
+	group balanceOf >=1
+		validator --> graph: emitting validation event (validatorId, nftAddr, userAddr, **verificationHash**, result)
+	end group
+    validator --> client: Ok
+
+	group There is a new Event that match **verificationHash** == HASH(UserSessionId, HASH(secretKey))
+    	user -> client: (*)OPT: Insert secretKey
+        note right: (*)For improved security, the user should supply the knowledge of the secret key.\nTo enhance the user experience, the secret key can either be omitted or saved in the session.
+		client -> graph: Querying events
+		graph --> client: Events
+		client  --> user: Authorizing user for discount
+		user -> client: Confirrm payments
+		client --> user: ok
+end group
+
+deactivate client
+@enduml

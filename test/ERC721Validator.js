@@ -66,7 +66,6 @@ describe("ERC721Validator", function () {
     const userSecret = "pwd12345" //generated from user 
     const abi = ethers.utils.defaultAbiCoder;
     const userSecretHashed = utils.keccak256(abi.encode(["string"], [userSecret]));
-    const verificationHashControll = utils.keccak256(abi.encode(["string", "bytes32"], [userSessionKey, userSecretHashed]));
     await erc721Validator.addNFT(nft1.address);
     await erc721Validator.addNFT(nft3.address);
     await erc721Validator.connect(user2).setSecret(userSecretHashed);
@@ -74,6 +73,7 @@ describe("ERC721Validator", function () {
     const blockNumber = await ethers.provider.getBlockNumber();
     const eventFilter = await erc721Validator.queryFilter('Validation', blockNumber - 10, blockNumber);
     let ev = eventFilter[0];
+    const verificationHashControll = utils.keccak256(abi.encode(["string", "bytes32"], [userSessionKey, userSecretHashed]));
     assert.equal(ev.args.verificationHash, verificationHashControll);
     assert.equal(ev.args.result, true);
   });
@@ -84,13 +84,13 @@ describe("ERC721Validator", function () {
     const userSecret = "pwd12345" //generated from user 
     const abi = ethers.utils.defaultAbiCoder;
     const userSecretHashed = utils.keccak256(abi.encode(["string"], [userSecret]));
-    const verificationHashControll = utils.keccak256(abi.encode(["string", "bytes32"], [userSessionKey, userSecretHashed]));
     await erc721Validator.addNFT(nft3.address);
     await erc721Validator.connect(user1).setSecret(userSecretHashed);
     await erc721Validator.connect(user1).validate(userSessionKey);
     const blockNumber = await ethers.provider.getBlockNumber();
     const eventFilter = await erc721Validator.queryFilter('Validation', blockNumber - 10, blockNumber);
     let ev = eventFilter[0];
+    const verificationHashControll = utils.keccak256(abi.encode(["string", "bytes32"], [userSessionKey, userSecretHashed]));
     assert.equal(ev.args.verificationHash, verificationHashControll);
     assert.equal(ev.args.result, false);
   });
