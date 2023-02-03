@@ -12,8 +12,8 @@ contract ERC721Validator {
         bool result
     );
 
-    event AddNFT(string validatorId, address NFTAddr, address from);
-    event RemoveNFT(string validatorId, address NFTAddr, address from);
+    event RegisterNFT(string validatorId, address NFTAddr, address from);
+    event UnregisterNFT(string validatorId, address NFTAddr, address from);
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not authorized");
@@ -67,9 +67,9 @@ contract ERC721Validator {
         return nfts;
     }
 
-    function addNFT(address _nftAddr) public onlyOwner {
+    function registerNFT(address _nftAddr) public onlyOwner {
         nfts.push(_nftAddr);
-        emit AddNFT(validatorId, _nftAddr, msg.sender);
+        emit RegisterNFT(validatorId, _nftAddr, msg.sender);
     }
 
     function removeNFT(address _nftAddr) public onlyOwner {
@@ -82,7 +82,7 @@ contract ERC721Validator {
             } else found = true;
         }
         nfts.pop();
-        emit RemoveNFT(validatorId, _nftAddr, msg.sender);
+        emit UnregisterNFT(validatorId, _nftAddr, msg.sender);
     }
 
     function activate() public onlyOwner {

@@ -1,6 +1,5 @@
-@startuml
+@startuml ERC721Validator flow
 autonumber
-
 actor user as "User"
 participant client as "Web App"
 box "Onchain"
@@ -13,7 +12,11 @@ participant graph as "The Graph"
 user -> nftm: Buying NFT
 nftm -> nft: Transfering ownership
 nft --> user
-client -> validator: Instantiating a validator linked to NFT address
+
+client -> validator: Instantiating a validator
+validator --> client: Ok
+client -> validator: Registering a NFT address calling **registerNFT**
+validator --> client: Ok
 validator --> nft
 
 user -> client: Setting a secretKey

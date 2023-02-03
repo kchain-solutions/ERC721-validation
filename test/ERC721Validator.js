@@ -42,9 +42,9 @@ describe("ERC721Validator", function () {
 
   it("Add addresses test", async () => {
     const { erc721ValidatorFactory, erc721Validator, nft1, nft2, nft3, owner, user1, user2 } = await loadFixture(fixture);
-    await erc721Validator.addNFT(nft1.address);
-    await erc721Validator.addNFT(nft2.address);
-    await erc721Validator.addNFT(nft3.address);
+    await erc721Validator.registerNFT(nft1.address);
+    await erc721Validator.registerNFT(nft2.address);
+    await erc721Validator.registerNFT(nft3.address);
     let addresses = await erc721Validator.getNFTs();
     assert.equal(addresses.length, 3);
 
@@ -52,9 +52,9 @@ describe("ERC721Validator", function () {
 
   it("Remove address test", async () => {
     const { erc721ValidatorFactory, erc721Validator, nft1, nft2, nft3, owner, user1, user2 } = await loadFixture(fixture);
-    await erc721Validator.addNFT(nft1.address);
-    await erc721Validator.addNFT(nft2.address);
-    await erc721Validator.addNFT(nft3.address);
+    await erc721Validator.registerNFT(nft1.address);
+    await erc721Validator.registerNFT(nft2.address);
+    await erc721Validator.registerNFT(nft3.address);
     await erc721Validator.removeNFT(nft2.address);
     let addresses = await erc721Validator.getNFTs();
     assert.equal(!addresses.includes(nft2.address), true);
@@ -66,8 +66,8 @@ describe("ERC721Validator", function () {
     const userSecret = "pwd12345" //generated from user 
     const abi = ethers.utils.defaultAbiCoder;
     const userSecretHashed = utils.keccak256(abi.encode(["string"], [userSecret]));
-    await erc721Validator.addNFT(nft1.address);
-    await erc721Validator.addNFT(nft3.address);
+    await erc721Validator.registerNFT(nft1.address);
+    await erc721Validator.registerNFT(nft3.address);
     await erc721Validator.connect(user2).setSecret(userSecretHashed);
     await erc721Validator.connect(user2).validate(userSessionKey);
     const blockNumber = await ethers.provider.getBlockNumber();
@@ -84,7 +84,7 @@ describe("ERC721Validator", function () {
     const userSecret = "pwd12345" //generated from user 
     const abi = ethers.utils.defaultAbiCoder;
     const userSecretHashed = utils.keccak256(abi.encode(["string"], [userSecret]));
-    await erc721Validator.addNFT(nft3.address);
+    await erc721Validator.registerNFT(nft3.address);
     await erc721Validator.connect(user1).setSecret(userSecretHashed);
     await erc721Validator.connect(user1).validate(userSessionKey);
     const blockNumber = await ethers.provider.getBlockNumber();
