@@ -1,4 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
+const { utils } = require('ethers');
 require('dotenv').config();
 
 const MNEMONIC = process.env.MNEMONIC;
@@ -10,6 +11,23 @@ function accounts() {
   return { mnemonic: MNEMONIC };
 }
 
+task("hashSecret", "Keccak256 hash from string")
+  .addParam("secret", "user secret string")
+  .setAction((taskArgs) => {
+    const abi = ethers.utils.defaultAbiCoder;
+    const secretHashed = utils.keccak256(abi.encode(["string"], [taskArgs.secret]));
+    console.log(secretHashed);
+  });
+
+task("checkHash", "Keccak256 hash from string")
+  .addParam("secret", "user secret string")
+  .addParam("userSessionKey", "userSessionKey")
+  .setAction((taskArgs) => {
+    const abi = ethers.utils.defaultAbiCoder;
+    const secretHashed = utils.keccak256(abi.encode(["string"], [taskArgs.secret]));
+    const verificationHashControll = utils.keccak256(abi.encode(["string", "bytes32"], [taskArgs.userSessionKey, secretHashed]));
+    console.log(verificationHashControll);
+  });
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {

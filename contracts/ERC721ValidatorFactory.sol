@@ -12,9 +12,12 @@ contract ERC721ValidatorFactory {
         address ownerAddr
     );
 
-    function newERC721Validator(string memory _validatorId) public {
+    function newERC721Validator(
+        address _owner,
+        string memory _validatorId
+    ) public {
         address erc721ValidatorAddr = address(
-            new ERC721Validator(_validatorId)
+            new ERC721Validator(_owner, _validatorId)
         );
         emit NewERC721Validator(erc721ValidatorAddr, _validatorId, msg.sender);
     }

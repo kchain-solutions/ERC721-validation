@@ -31,6 +31,11 @@ contract ERC721Validator {
         _;
     }
 
+    modifier onlyActive() {
+        require(isActive == true, "Contract inactive");
+        _;
+    }
+
     address owner;
     bool public isActive;
     address[] public nfts;
@@ -38,17 +43,17 @@ contract ERC721Validator {
 
     mapping(address => bytes32) private userSecrets;
 
-    constructor(string memory _validatorId) {
-        owner = msg.sender;
+    constructor(address _owner, string memory _validatorId) {
+        owner = _owner;
         isActive = true;
         validatorId = _validatorId;
     }
 
-    function setSecret(bytes32 _secret) public {
+    function setSecret(bytes32 _secret) public onlyActive {
         userSecrets[msg.sender] = _secret;
     }
 
-    function validate(string memory _userSessionId) public {
+    function validate(string memory _userSessionId) public onlyActive {
         require(nfts.length > 0, "Empty NFT collection");
         require(
             userSecrets[msg.sender] != bytes32(0),
@@ -81,16 +86,16 @@ contract ERC721Validator {
         );
     }
 
-    function getNFTs() public view returns (address[] memory) {
+    function getNFTs() public view onlyActive returns (address[] memory) {
         return nfts;
     }
 
-    function registerNFT(address _nftAddr) public onlyOwner {
+    function registerNFT(address _nftAddr) public onlyOwner onlyActive {
         nfts.push(_nftAddr);
         emit RegisterNFT(address(this), validatorId, _nftAddr, msg.sender);
     }
 
-    function removeNFT(address _nftAddr) public onlyOwner {
+    function removeNFT(address _nftAddr) public onlyOwner onlyActive {
         uint newLength = 0;
         bool found = false;
         for (uint idx = 0; idx < nfts.length; idx++) {

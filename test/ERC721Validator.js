@@ -13,9 +13,8 @@ describe("ERC721Validator", function () {
     await erc721ValidatorFactory.deployed();
 
     const ERC721Validator = await ethers.getContractFactory("ERC721Validator");
-    const erc721Validator = await ERC721Validator.deploy("VID1");
+    const erc721Validator = await ERC721Validator.deploy(owner.address, "VID1");
     await erc721Validator.deployed();
-
 
     const NFT1 = await ethers.getContractFactory("Token");
     const nft1 = await NFT1.deploy("Token1", "TK1", user1.address);
@@ -30,7 +29,6 @@ describe("ERC721Validator", function () {
     await nft3.deployed();
 
     return { erc721ValidatorFactory, erc721Validator, nft1, nft2, nft3, owner, user1, user2 };
-
   }
 
   it("Deploy test", async () => {
@@ -47,7 +45,6 @@ describe("ERC721Validator", function () {
     await erc721Validator.registerNFT(nft3.address);
     let addresses = await erc721Validator.getNFTs();
     assert.equal(addresses.length, 3);
-
   });
 
   it("Remove address test", async () => {
@@ -58,6 +55,21 @@ describe("ERC721Validator", function () {
     await erc721Validator.removeNFT(nft2.address);
     let addresses = await erc721Validator.getNFTs();
     assert.equal(!addresses.includes(nft2.address), true);
+  });
+
+  it("Deactivate test", async () => {
+    const { erc721ValidatorFactory, erc721Validator, nft1, nft2, nft3, owner, user1, user2 } = await loadFixture(fixture);
+    await erc721Validator.registerNFT(nft1.address);
+    await erc721Validator.registerNFT(nft2.address);
+    await erc721Validator.deactivate();
+    let error = false;
+    try {
+      await erc721Validator.registerNFT(nft3.address);
+    }
+    catch {
+      error = true
+    }
+    assert.equal(error, true);
   });
 
   it("Validation test success", async () => {
