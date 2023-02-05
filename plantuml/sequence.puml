@@ -1,4 +1,4 @@
-@startuml ERC721Validator flow
+@startuml
 autonumber
 actor user as "User"
 participant client as "Web App"
@@ -14,26 +14,32 @@ nftm -> nft: Transfering ownership
 nft --> user
 
 client -> validator: Instantiating a validator
+activate client
 validator --> client: Ok
+deactivate client
 client -> validator: Registering a NFT address calling **registerNFT**
-validator --> client: Ok
+activate client
 validator --> nft
+validator --> client: Ok
+deactivate client
 
 user -> client: Setting a secretKey
-client -> validator: call setSecret method
+activate client
+client -> validator: Call **setSecret** method
 validator --> client: Ok 
 client -> client: (*)OPT: saving secretKey
 client --> user: Ok
+deactivate client
 
 user -> client: Payment with NFT discount  
 activate client
 
-	client -> validator: call validate method with an **userSessionId**
-	validator -> nft: balanceOf for the user address 
+	client -> validator: Call **validate** method with an **userSessionId**
+	validator -> nft: **balanceOf** for the user address 
 	nft --> validator
 
 	group balanceOf >=1
-		validator --> graph: emitting validation event (validatorId, nftAddr, userAddr, **verificationHash**, result)
+		validator --> graph: Emitting **validation event** (validatorId, nftAddr, userAddr, **verificationHash**, result)
 	end group
     validator --> client: Ok
 
@@ -44,7 +50,7 @@ activate client
 		graph --> client: Events
 		client  --> user: Authorizing user for discount
 		user -> client: Confirrm payments
-		client --> user: ok
+		client --> user: Ok
 end group
 
 deactivate client

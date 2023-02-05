@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract ERC721Validator {
     event Validation(
+        address validatorAddr,
         string validatorId,
         address nftAddr,
         address userAddr,
@@ -12,8 +13,18 @@ contract ERC721Validator {
         bool result
     );
 
-    event RegisterNFT(string validatorId, address NFTAddr, address from);
-    event UnregisterNFT(string validatorId, address NFTAddr, address from);
+    event RegisterNFT(
+        address validatorAddr,
+        string validatorId,
+        address NFTAddr,
+        address from
+    );
+    event UnregisterNFT(
+        address validatorAddr,
+        string validatorId,
+        address NFTAddr,
+        address from
+    );
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not authorized");
@@ -60,7 +71,14 @@ contract ERC721Validator {
         bytes32 verificationHash = keccak256(
             abi.encode(_userSessionId, userSecrets[msg.sender])
         );
-        emit Validation(validatorId, nft, msg.sender, verificationHash, found);
+        emit Validation(
+            address(this),
+            validatorId,
+            nft,
+            msg.sender,
+            verificationHash,
+            found
+        );
     }
 
     function getNFTs() public view returns (address[] memory) {
@@ -69,7 +87,7 @@ contract ERC721Validator {
 
     function registerNFT(address _nftAddr) public onlyOwner {
         nfts.push(_nftAddr);
-        emit RegisterNFT(validatorId, _nftAddr, msg.sender);
+        emit RegisterNFT(address(this), validatorId, _nftAddr, msg.sender);
     }
 
     function removeNFT(address _nftAddr) public onlyOwner {
@@ -82,7 +100,7 @@ contract ERC721Validator {
             } else found = true;
         }
         nfts.pop();
-        emit UnregisterNFT(validatorId, _nftAddr, msg.sender);
+        emit UnregisterNFT(address(this), validatorId, _nftAddr, msg.sender);
     }
 
     function activate() public onlyOwner {

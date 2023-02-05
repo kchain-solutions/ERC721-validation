@@ -1,0 +1,26 @@
+specVersion: 0.0.5
+description: Simple blog
+repository: https://github.com/kchain-solutions/solidity-simple-blog
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: ERC721ValidatorFactory
+    network: mumbai
+    source:
+      address: "0x55e9B376EB9274287C358e01B0331F0159b134c7"
+      abi: ERC721ValidatorFactory
+      startBlock: 31752200
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - NewERC721Validator
+      abis:
+        - name: ERC721ValidatorFactory
+          file: ./abis/ERC721ValidatorFactory.json
+      eventHandlers:
+        - event: NewERC721Validator(address,string,address)
+          handler: handleNewERC721Validator
+      file: ./src/mapping.ts
