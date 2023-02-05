@@ -9,7 +9,7 @@ contract ERC721ValidatorFactory {
     event NewERC721Validator(
         address validatorAddr,
         string validatorId,
-        address owner
+        address ownerAddr
     );
 
     function newERC721Validator(string memory _validatorId) public {

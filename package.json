@@ -3,10 +3,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ simple-blog",
-    "create-local": "graph create --node http://localhost:8020/ simple-blog",
-    "remove-local": "graph remove --node http://localhost:8020/ simple-blog",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 simple-blog",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ erc721-validator",
+    "create-local": "graph create --node http://localhost:8020/ erc721-validator",
+    "remove-local": "graph remove --node http://localhost:8020/ erc721-validator",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 erc721-validator",
     "test": "graph test"
   },
   "devDependencies": {

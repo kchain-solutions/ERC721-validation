@@ -2,7 +2,7 @@ specVersion: 0.0.5
 description: ERC721Validator
 repository: https://github.com/kchain-solutions/solidity-simple-blog
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: ERC721ValidatorFactory
@@ -19,8 +19,8 @@ dataSources:
         - NewERC721Validator
       abis:
         - name: ERC721ValidatorFactory
-          file: ./abis/ERC721ValidatorFactory.json
+          file: ERC721ValidatorFactory/abis/ERC721ValidatorFactory.json
       eventHandlers:
         - event: NewERC721Validator(address,string,address)
           handler: handleNewERC721Validator
-      file: ./src/mapping.ts
+      file: ERC721ValidatorFactory/ERC721ValidatorFactory.wasm
