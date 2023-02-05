@@ -8,5 +8,8 @@ export function handleNewERC721Validator(event: NewERC721ValidatorEvent): void {
     entity.validatorId = event.params.validatorId;
     entity.ownerAddr = event.params.ownerAddr;
     entity.validatorAddr = event.params.validatorAddr;
+    entity.blockNumber = event.block.number
+    entity.blockTimestamp = event.block.timestamp
+    entity.transactionHash = event.transaction.hash
     entity.save();
 }

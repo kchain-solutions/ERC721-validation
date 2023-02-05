@@ -1,7 +1,7 @@
 {
     "mumbai": {
-        "ERC721Validator": {
-            "address": "0x646c5f7526671a3b38dFa49dA8B1ef34759E739F"
+        "goerli": {
+            "address": "0x894c804e98Cb5839BF4817885447B6fdB1C0AFEB"
         }
     }
 }

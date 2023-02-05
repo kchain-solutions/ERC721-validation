@@ -22,7 +22,7 @@ async function main() {
 
   console.log(`\nVerifying contract on Etherscan...`);
   await run(`verify:verify`, {
-    address: blogFactory.address,
+    address: erc721ValidatorFactory.address,
     constructorArguments: []
   });
 }

@@ -1,6 +1,9 @@
-type NewERC721Validator @entity (immutable:true) {
+type NewERC721Validator @entity(immutable:true) {
     id: Bytes! 
     ownerAddr: Bytes! #address
     validatorAddr: Bytes! #address
     validatorId: String!
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
 }
