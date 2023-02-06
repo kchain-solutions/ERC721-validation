@@ -24,3 +24,22 @@ dataSources:
         - event: NewERC721Validator(address,string,address)
           handler: handleNewERC721Validator
       file: ./src/mapping.ts
+templates:
+- kind: ethereum
+  name: ERC721Validator
+  network: goerli
+  source:
+    abi: ERC721Validator
+  mapping:
+    kind: ethereum/events
+    apiVersion: 0.0.7
+    language: wasm/assemblyscript
+    entities:
+      - Validation
+    abis:
+      - name: ERC721Validator
+        file: ./abis/ERC721Validator.json
+    eventHandlers:
+      - event: Validation(address,string,address,address,bytes32,bool)
+        handler: handleValidation
+    file: ./src/mapping.ts
