@@ -4,6 +4,9 @@ const PATH = "./artifacts/contracts";
 const TARGET_PATH = "./abis"
 
 async function main() {
+    if (!fs.existsSync(TARGET_PATH)) {
+        fs.mkdirSync(TARGET_PATH);
+    }
     const dirList = fs.readdirSync(PATH);
     const targetFiles = await Promise.all(dirList.map(async (el) => {
         try {
@@ -18,7 +21,7 @@ async function main() {
             return error + " on element " + el;
         }
     }));
-    console.log("Result: ", targetFiles);
+    console.log("abi files created: ", targetFiles);
 
 }
 
