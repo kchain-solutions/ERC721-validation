@@ -8,7 +8,7 @@ dataSources:
     name: ERC721ValidatorFactory
     network: goerli
     source:
-      address: "0x71F87E4928db6Cf8DE47b0e3487947Ccdf1a0A88"
+      address: "0x6fcdAE237FeAdEc17DEF32109b01ea49407283fd"
       abi: ERC721ValidatorFactory
       startBlock: 8443300
     mapping:

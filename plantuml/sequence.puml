@@ -1,4 +1,4 @@
-@startuml
+@startuml 
 autonumber
 actor user as "User"
 participant client as "Web App"
@@ -30,28 +30,26 @@ validator --> client: Ok
 client -> client: (*)OPT: saving secretKey
 client --> user: Ok
 deactivate client
+group Payment
+		user -> client: Payment with NFT discount  
+	activate client
+		client -> validator: Call **validate** method with an **userSessionId**
+		validator -> nft: **balanceOf** for the user address 
+		nft --> validator
 
-user -> client: Payment with NFT discount  
-activate client
+		group balanceOf >=1
+			validator --> graph: Emitting **validation event** (validatorId, nftAddr, userAddr, **verificationHash**, result)
+		end group
+		validator --> client: Ok
 
-	client -> validator: Call **validate** method with an **userSessionId**
-	validator -> nft: **balanceOf** for the user address 
-	nft --> validator
-
-	group balanceOf >=1
-		validator --> graph: Emitting **validation event** (validatorId, nftAddr, userAddr, **verificationHash**, result)
-	end group
-    validator --> client: Ok
-
-	group There is a new Event that match **verificationHash** == HASH(UserSessionId, HASH(secretKey))
-    	user -> client: (*)OPT: Insert secretKey
-        note right: (*)For improved security, the user should supply the knowledge of the secret key.\nTo enhance the user experience, the secret key can either be omitted or saved in the session.
 		client -> graph: Querying events
-		graph --> client: Events
+		graph --> client: Events with **verificationHash**
+		user -> client: (*)OPT: Insert secretKey
+		note right: (*)To improve security, the user should prove the knowledge of his secret Key.\nOn the other hand, to enhance the user experience, the secret key can either be omitted or saved in the session.
+		client -> client: Checking if there is a new Event that match\n**verificationHash** == **HASH(UserSessionId, HASH(secretKey))**
 		client  --> user: Authorizing user for discount
-		user -> client: Confirrm payments
+		user -> client: Confirm payments
 		client --> user: Ok
+	deactivate client
 end group
-
-deactivate client
 @enduml
