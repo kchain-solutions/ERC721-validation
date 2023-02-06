@@ -47,6 +47,17 @@ describe("ERC721Validator", function () {
     assert.equal(addresses.length, 3);
   });
 
+  it("Add invalid addresses", async () => {
+    const { erc721ValidatorFactory, erc721Validator, nft1, nft2, nft3, owner, user1, user2 } = await loadFixture(fixture);
+    let exception = false;
+    try {
+      await erc721Validator.registerNFT(erc721ValidatorFactory.address);
+    } catch (error) {
+      exception = true;
+    }
+    assert.equal(exception, true);
+  });
+
   it("Remove address test", async () => {
     const { erc721ValidatorFactory, erc721Validator, nft1, nft2, nft3, owner, user1, user2 } = await loadFixture(fixture);
     await erc721Validator.registerNFT(nft1.address);

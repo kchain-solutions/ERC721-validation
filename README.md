@@ -1,4 +1,4 @@
-# ERC721 Validation
+# ERC721 Validator
 #### How to connect NFT in the real 
 
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.

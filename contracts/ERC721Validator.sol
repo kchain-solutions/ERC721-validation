@@ -2,6 +2,7 @@
 pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
 contract ERC721Validator {
     event Validation(
@@ -91,6 +92,12 @@ contract ERC721Validator {
     }
 
     function registerNFT(address _nftAddr) public onlyOwner onlyActive {
+        bytes4 erc721ID = bytes4(0x80ac58cd);
+        IERC165 checker = IERC165(_nftAddr);
+        require(
+            checker.supportsInterface(erc721ID) == true,
+            "Only ERC721 address are allowed"
+        );
         nfts.push(_nftAddr);
         emit RegisterNFT(address(this), validatorId, _nftAddr, msg.sender);
     }
