@@ -1,4 +1,4 @@
-# Use of NFT in a "real web2.0" application
+# Real NFT application in the "real world 2.0"
 
 # Introduction
 An NFT can be deemed valuable when its unique characteristics allow the exercise of rights over goods, services, products, or access. In this article, we will examine this use case, which is straightforward to implement in a fully decentralized application where the NFT is linked to our account and we operate only inside the chain. However, the scenario changes when we want to verify NFT ownership in a Web2.0 application where we aim to receive, for example, a discount through a FIAT payment. We will explore how to accomplish this by integrating TheGraph, GraphQL, Ethers, a Web2.0 application, and utilizing the event system of the Ethereum Virtual Machine (EVM).
@@ -118,7 +118,7 @@ Remeber the process:
 * Only the contract creator address can call the ```registerNFT``` method.
 * You should associate the NFT just registered to the user
 * The user address MUST set an hashed secret with ```setSecret```. Take a look to Utility functions and ```npx hardhat hashSecret --secret "kchain"```
-* The user finally can call ```validate```
+* The user can finally call ```validate```
 
 ## 5. Deploy the subgraph to read events following [this tutorial](https://github.com/kchain-solutions/thegraph-simple-blog) 
 ```shell
@@ -127,7 +127,7 @@ graph auth --studio <DEPLOY KEY>
 npm run codegen
 npm run deploy
 ```
-Here is a query example to retireve successful validations
+Here is a query example to retrieve successful validations
 ![](./img/thegraph.png)
 
 If you need further clarification on the use of the code, do not hesitate to contact me for advice 
