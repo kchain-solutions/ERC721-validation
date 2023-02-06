@@ -1,7 +1,7 @@
 # Use of NFT in a "real web2.0" application
 
 # Introduction
-An NFT can be deemed valuable when its unique characteristics allow the exercise of rights over goods, services, products, or access. In this article, we will examine this use case, which is straightforward to implement in a fully decentralized application where the NFT is linked to our account. However, the scenario changes when we want to verify NFT ownership in a Web2.0 application where we aim to receive a discount through a FIAT payment. We will explore how to accomplish this by integrating TheGraph, GraphQL, Ethers, a Web2.0 application, and utilizing the event system of the Ethereum Virtual Machine (EVM).
+An NFT can be deemed valuable when its unique characteristics allow the exercise of rights over goods, services, products, or access. In this article, we will examine this use case, which is straightforward to implement in a fully decentralized application where the NFT is linked to our account and we operate only inside the chain. However, the scenario changes when we want to verify NFT ownership in a Web2.0 application where we aim to receive, for example, a discount through a FIAT payment. We will explore how to accomplish this by integrating TheGraph, GraphQL, Ethers, a Web2.0 application, and utilizing the event system of the Ethereum Virtual Machine (EVM).
 
 # The idea
 ![](./img/erc721validator.svg)
@@ -24,32 +24,35 @@ The sequence diagram illustrates one of the potential use cases we aim to depict
 
 [22-26] The payment with discount and NFT ownership are confirmed only if the hash calculated by the smart contract matches the expected hash in the web application. In this case, the user may be required to re-enter their secret key.
 
-# The code
+# Execute the code
 
 ## Requirements
 * Install [Node](https://nodejs.org/en/)
 * Clone the repository ```git clone https://github.com/kchain-solutions/ERC721-validation.git```
 
-For the successful execution of the code, it is crucial to compile the ```.env``` file with the appropriate configuration parameters.
+For the successful execution of the code, it is required to compile the ```.env``` file with the appropriate configuration parameters.
 ```
 MNEMONIC=""
 GOERLI_ENDPOINT=https://goerli.infura.io/v3/xxxxxxxxxxxxxxxxx
 ETHERSCAN_API_KEY=yyyyyyyyyyyyyyy
 ```
 
-1. Install packages and run unit-tests
+## 1. Install packages and run unit-tests
 ```shell
 npm install
 npx hardhat test
 ```
+![](./img/test.png)
 
-2. Deploy ERC721ValidatorFactory
+## 2. Deploy ERC721ValidatorFactory
 
 ```shell
 npx hardhat scripts/deploy.js --network goerli
 ```
 
-3. Insert the ERC721ValidatorFactory address into the subgraph.yaml and network.json
+![](./img/deploy.png)
+
+## 3. Insert the ERC721ValidatorFactory address into the subgraph.yaml and network.json
 
 ```yaml
 specVersion: 0.0.5
@@ -97,7 +100,6 @@ templates:
       - event: Validation(address,string,address,address,bytes32,bool)
         handler: handleValidation
     file: ./src/mapping.ts
-
 ```
 
 ```json
@@ -109,21 +111,32 @@ templates:
     }
 }
 ```
+## 4. Play with remix
+You can play the contract cloning the repository using Remix.
+![](img/remix.png)
+Remeber the process: 
+* Only the contract creator address can call the ```registerNFT``` method.
+* You should associate the NFT just registered to the user
+* The user address MUST set an hashed secret with ```setSecret```. Take a look to Utility functions and ```npx hardhat hashSecret --secret "kchain"```
+* The user finally can call ```validate```
 
-4. Deploy the subgraph following [this tutorial](https://github.com/kchain-solutions/thegraph-simple-blog) 
+## 5. Deploy the subgraph to read events following [this tutorial](https://github.com/kchain-solutions/thegraph-simple-blog) 
 ```shell
 npm install -g @graphprotocol/graph-cli
 graph auth --studio <DEPLOY KEY>
 npm run codegen
 npm run deploy
 ```
+Here is a query example to retireve successful validations
+![](./img/thegraph.png)
 
 If you need further clarification on the use of the code, do not hesitate to contact me for advice 
 
 # Utility functions
+
 ## Export abi files from ./artifacts to ./abis
 ```shell
-npx hardhat run scripts/loadAbisFile.js
+npx hardhat run scripts/loadAbiFiles.js
 ```
 
 ## Hashing a secretKey with Keccak256
