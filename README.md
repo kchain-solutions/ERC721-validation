@@ -1,7 +1,10 @@
 # Real NFT application in the "real world 2.0"
 
 # Introduction
-An NFT can be deemed valuable when its unique characteristics allow the exercise of rights over goods, services, products, or access. In this article, we will examine this use case, which is straightforward to implement in a fully decentralized application where the NFT is linked to our account and we operate only inside the chain. However, the scenario changes when we want to verify NFT ownership in a Web2.0 application where we aim to receive, for example, a discount through a FIAT payment. We will explore how to accomplish this by integrating TheGraph, GraphQL, Ethers, a Web2.0 application, and utilizing the event system of the Ethereum Virtual Machine (EVM).
+An NFT can be deemed valuable when its unique characteristics allow the exercise of rights over goods, services, products, or access. In this article, we will examine this use case, which is straightforward to implement in a fully decentralized application where the NFT is linked to our account and we operate only inside the chain. However, the scenario changes when we want to verify NFT ownership in a Web 2.0 application where we aim to receive, for example, a discount through a FIAT payment.
+
+We analyze this second scenario because well-established brands may find it too burdensome to completely revamp all their processes to align with a strict 3.0 standard, and it may be more prudent to gradually integrate the new methodologies and protocols.
+We will explore how to accomplish this by integrating TheGraph, GraphQL, Ethers, a Web 2.0 application, and utilizing the event system of the Ethereum Virtual Machine.
 
 # The idea
 ![](./img/erc721validator.svg)
@@ -25,12 +28,29 @@ The sequence diagram illustrates one of the potential use cases we aim to depict
 [22-26] The payment with discount and NFT ownership are confirmed only if the hash calculated by the smart contract matches the expected hash in the web application. In this case, the user may be required to re-enter their secret key.
 
 # Execute the code
+The developed code includes the logic for a smart contract and the files necessary for generating a subgraph to be published on The Graph.
+These are the key files of the project.
+
+| Filename                            | Usage                                                                                                  |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| contract/ERC721ValidatorFactory.sol | The factory contract to instatiate a new validator                                                     |
+| contract/ERC721ValidatorFactory.sol | The Validator contract that caontains all the logics                                                   |
+| test/ERC721Validator.js             | Unit tests files                                                                                       |
+| abis/                               | The folder must contain the abis of the contracts                                                      |
+| schema.graphql                      | The GraphQL schema that defines what data is stored for your subgraph, and how to query it via GraphQL |
+| subgraph.yaml                       | The subgraph manifest where you have to insert the ERC721ValidatorFactory address                      |
+| network.json                        | Network configuration file where you have to insert the ERC721ValidatorFactory address                 |
+| src/mapping.ts                      | Graph code that translates from the event data to the entities defined in your schema                  |
+| .env                                | Environment variable file                                                                              |
+| harhat.config.js                    | Hardhat configuration file                                                                             |
+
 
 ## Requirements
 * Install [Node](https://nodejs.org/en/)
 * Clone the repository ```git clone https://github.com/kchain-solutions/ERC721-validation.git```
 
 For the successful execution of the code, it is required to compile the ```.env``` file with the appropriate configuration parameters.
+
 ```
 MNEMONIC=""
 GOERLI_ENDPOINT=https://goerli.infura.io/v3/xxxxxxxxxxxxxxxxx
@@ -128,9 +148,7 @@ npm run codegen
 npm run deploy
 ```
 Here is a query example to retrieve successful validations
-![](./img/thegraph.png)
-
-If you need further clarification on the use of the code, do not hesitate to contact me for advice 
+![](./img/thegraph.png) 
 
 # Utility functions
 
@@ -153,3 +171,6 @@ npx hardhat hashSecret --secret "kchain"
 ```shell
 npx hardhat controlHash --secret kchain --user-session-key session1  --hash 0x0b29ecc5ee57a77bb9b0b16b32d5e3d7bfb209512685705ad98746c0c357bbda
 ```
+
+
+**If you need further clarification on the use of the code, do not hesitate to contact me for advice**
